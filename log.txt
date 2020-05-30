@@ -50,3 +50,10 @@ for (stat in this.selectedItem.customStats) {
         this.stats[stat] =+ this.selectedItem.customStats[stat];
     };
   };
+
+
+//replacing with Tween
+   // setTimeout(function() {
+  //   //set the scene back to ready
+  //   scene.uiReady();
+  // }, 2000);
