@@ -10,6 +10,13 @@ gameScene.init = function() {
 
   }; // end stats
 
+   //decay parameters
+
+   this.decayRates = {
+     health: -5,
+     fun: -2
+   };
+   
 
 }; // end initialization
 
@@ -70,6 +77,15 @@ this.createUi();
 //show stats to the user
 this.createHud();
 this.refreshHud();
+
+//decay of health and fun over time
+this.timedEventStats= this.time.addEvent({
+  delay: 1000,
+  repeat: -1, /// repeat forever
+  callback: function() {      //update stats
+    this.updateStats(this.decayRates)},
+  callbackScope: this,
+}); //end decay
 
 
 }; //end create
@@ -132,14 +148,13 @@ if(this.scene.uiBlocked) return;
     pause: false,
     callbackScope: this,
     onComplete: function(tween, sprites){
-      //increase fun
-      this.scene.stats.fun += this.customStats.fun;
+
+      //update stats
+      this.scene.updateStats(this.customStats);
 
       // set ui to ready
       this.scene.uiReady();
 
-      //refresh hud
-    this.scene.refreshHud();
     }
   });
 };
@@ -207,10 +222,6 @@ gameScene.placeItem = function(pointer, localX, localY) {
       //destroy the item
       newItem.destroy();
 
-
-      //play spritesheet animation
-      this.pet.play('funnyfaces');
-
       // event listener for when spritesheet animation ends
       this.pet.on('animationcomplete', function() {
 
@@ -220,20 +231,14 @@ gameScene.placeItem = function(pointer, localX, localY) {
         //clear the UI
         this.uiReady();
 
-      //refresh hud
-      this.refreshHud();
-
       }, this);
-
-
-  // pet stats
-  for(stat in this.selectedItem.customStats) {
-    if(this.selectedItem.customStats.hasOwnProperty(stat)) {
-        this.stats[stat] += this.selectedItem.customStats[stat];
-    }
-  };
-
       
+      //play spritesheet animation
+      this.pet.play('funnyfaces');
+
+      //update stats
+      this.updateStats(this.selectedItem.customStats);
+
     }
   });
  
@@ -258,7 +263,41 @@ this.funText = this.add.text(170,20, 'Fun: ', {
 gameScene.refreshHud = function() {
   this.healthText.setText('Health: ' + this.stats.health);
   this.funText.setText('Fun: ' + this.stats.fun);
-}
+};
+
+// stat updater
+gameScene.updateStats = function(statDiff) {
+  //manual 
+  // this.stats.health += statDiff.health;
+  // this.stats.fun += statDiff.fun;
+
+  // flag to see if game over
+  let isGameOver = false;
+
+    // more flexible
+    for(stat in statDiff) {
+      if(statDiff.hasOwnProperty(stat)) {
+          this.stats[stat] += statDiff[stat];
+          //stats cant be less than zero
+          if(this.stats[stat] < 0) {
+            isGameOver = true;
+            this.stats[stat] = 0; 
+
+          };
+      };
+    };
+    
+//refresh HUD
+this.refreshHud();
+
+
+          // Game Over, Man! GAME OVER!
+    if(isGameOver) this.gameOver();
+};
+
+gameScene.gameOver = function() {
+  console.log('gameover');
+};
 
 
 // our game's configuration

@@ -60,4 +60,9 @@ for (stat in this.selectedItem.customStats) {
 
   Heads up display time
 
+  Timed Events....
+
+  Remooooooved for an array:
   
+   this.healthDecay = 5;
+   this.funDecay = 2;
