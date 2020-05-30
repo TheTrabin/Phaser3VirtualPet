@@ -1,0 +1,16 @@
+Sprite Sheet
+
+//load Sprite sheet
+this.load.spritesheet("pet", 'assets/images/pet.png', {
+    frameWidth: 97,
+    frameHeight: 83,
+    margin: 1, 
+    spacing: 1,
+});
+
+//add sprite
+
+gameScene.create = function() {
+
+  this.pet = this.add.sprite(100,200, 'pet');
+};
