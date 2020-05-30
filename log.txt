@@ -29,3 +29,24 @@ this.input.setDraggable(this.pet);
   });
 
    // console.log(this.customStats);
+
+
+
+
+//place new item on the game
+gameScene.placeItem = function(pointer, localX, localY) {
+    check pointer on click location.
+   console.log(pointer);
+console.log(localX, localY);
+}; //end placeItem
+
+//singletons
+this.stats.health = this.selectedItem.customStats.health;
+  this.stats.fun = this.selectedItem.customStats.fun;
+
+//benefit is if there's more than one or two stats, this will rock with all of them.
+for (stat in this.selectedItem.customStats) {
+    if(this.selectedItem.customStats.hasOwnProperty(stat)) {
+        this.stats[stat] =+ this.selectedItem.customStats[stat];
+    };
+  };

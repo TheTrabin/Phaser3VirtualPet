@@ -36,7 +36,10 @@ gameScene.preload = function() {
 gameScene.create = function() {
 
   //game Background
-  this.bg = this.add.sprite( 0, 0, 'backyard').setOrigin(0,0);
+  this.bg = this.add.sprite( 0, 0, 'backyard').setOrigin(0,0).setInteractive();
+
+  // event listener for the background
+  this.bg.on('pointerdown', this.placeItem, this);
 
   this.pet = this.add.sprite(100,200, 'pet', 0).setInteractive();
 
@@ -144,6 +147,30 @@ gameScene.uiReady = function() {
 // scene is unblocked
 this.uiBlocked = false;
 }; //end ui ready
+
+//place new item on the game
+gameScene.placeItem = function(pointer, localX, localY) {
+  //check that an item was selected
+  if(!this.selectedItem) return;
+
+  //create a new item in the positing the player clicked.
+  let newItem = this.add.sprite(localX, localY, this.selectedItem.texture.key);
+
+
+  console.log(this.selectedItem.customStats);
+  // pet stats
+  for (stat in this.selectedItem.customStats) {
+    if(this.selectedItem.customStats.hasOwnProperty(stat)) {
+        this.stats[stat] =+ this.selectedItem.customStats[stat];
+    };
+  };
+
+  console.log(this.stats);
+
+  //clear the UI
+  this.uiReady();
+
+}; //end placeItem
 
 
 // our game's configuration
