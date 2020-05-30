@@ -66,3 +66,17 @@ for (stat in this.selectedItem.customStats) {
   
    this.healthDecay = 5;
    this.funDecay = 2;
+
+
+Home Screen and Game over
+
+
+
+
+//no longer needed. In Loading Scene now.
+// load asset files for our game
+gameScene.preload = function() {
+  
+  
+
+}; //end preload
