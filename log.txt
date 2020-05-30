@@ -27,3 +27,5 @@ this.input.setDraggable(this.pet);
     gameObject.y = dragY;
     
   });
+
+   // console.log(this.customStats);

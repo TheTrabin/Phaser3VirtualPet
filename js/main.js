@@ -8,10 +8,10 @@ gameScene.init = function() {
     health: 100,
     fun: 100,
 
-  };
+  }; // end stats
 
 
-};
+}; // end initialization
 
 // load asset files for our game
 gameScene.preload = function() {
@@ -28,8 +28,9 @@ gameScene.preload = function() {
     frameHeight: 83,
     margin: 1, 
     spacing: 1,
-});
-};
+}); //end spritesheet
+
+}; //end preload
 
 // executed once, after assets were loaded
 gameScene.create = function() {
@@ -48,13 +49,13 @@ gameScene.create = function() {
     gameObject.x = dragX;
     gameObject.y = dragY;
 
-  });
+  }); // end input method
 
 //create ui
 this.createUi();
 
 
-};
+}; //end create
 
 //create ui
 gameScene.createUi = function() {
@@ -74,18 +75,75 @@ gameScene.createUi = function() {
   this.rotateBtn = this.add.sprite(288,570, 'rotate').setInteractive();
   this.rotateBtn.on('pointerdown', this.rotatePet);
 
-};
+// array all buttons
+this.buttons = [this.appleBtn, this.candyBtn, this.toyBtn, this.rotateBtn];
+
+
+//ui is not blocked
+this.uiBlocked = false;
+
+//refresh UI
+this.uiReady();
+
+}; //End Create UI
+
+
 //rotate pet
 gameScene.rotatePet = function() {
+
+//ui can't be blocked to rotate
+if(this.scene.uiBlocked) return;
+
+//make sure the ui is ready
+  this.scene.uiReady();
+
+  // block ui
+  this.scene.uiBlocked = true;
+
+
+  //dim the rotate button
+  this.alpha = 0.5;
+
+  let scene = this.scene;
+  setTimeout(function() {
+    //set the scene back to ready
+    scene.uiReady();
+  }, 2000);
+
   console.log('we are rotating the pet!');
 };
 
 // pick item
 gameScene.pickItem = function() {
-  console.log(this.customStats);
+ 
+  //ui can't be blocked to select an item.
+  if(this.scene.uiBlocked) return;
+
+  //make sure the ui is ready
+  this.scene.uiReady();
+
+  //select item
+  this.scene.selectedItem = this;
+
+  // change transparancy
+  this.alpha = 0.5;
 
   console.log('We are picking ' + this.texture.key);
-};
+}; // end pick item
+
+//set ui to "ready"
+gameScene.uiReady = function() {
+  //nothing is being selected
+  this.selectedItem = null;
+
+  //set all buttons to alpha 1
+  for(let i = 0; i < this.buttons.length; i++) {
+    this.buttons[i].alpha = 1;
+  };
+
+// scene is unblocked
+this.uiBlocked = false;
+}; //end ui ready
 
 
 // our game's configuration
@@ -97,7 +155,7 @@ let config = {
   title: 'Virtual Pet',
   pixelArt: false,
   backgroundColor: 'ffffff'
-};
+}; // end config
 
 // create the game, and pass it the configuration
 let game = new Phaser.Game(config);
