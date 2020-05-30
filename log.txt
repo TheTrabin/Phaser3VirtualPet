@@ -14,3 +14,16 @@ gameScene.create = function() {
 
   this.pet = this.add.sprite(100,200, 'pet');
 };
+
+
+set things draggable
+
+this.input.setDraggable(this.pet);
+
+//explicit. Follow the pointer (mouse/pointer) when dragging.
+  this.input.on('drag', function(pointer, gameObject, dragX, dragY) {
+    //make sprite located at coordinate of the dragging
+    gameObject.x = dragX;
+    gameObject.y = dragY;
+    
+  });
