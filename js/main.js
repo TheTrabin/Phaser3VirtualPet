@@ -42,9 +42,19 @@ gameScene.create = function() {
   this.bg.on('pointerdown', this.placeItem, this);
 
   this.pet = this.add.sprite(100,200, 'pet', 0).setInteractive();
+  this.pet.depth = 1;
 
   //draggable pet
   this.input.setDraggable(this.pet);
+
+  // animation
+  this.anims.create({
+    key: 'funnyfaces',
+    frames: this.anims.generateFrameNames('pet', {frames: [1, 2, 3]}),
+    frameRate: 7,
+    yoyo: true,
+    repeat: 0 // to play forever -1
+  });
 
   //explicit. Follow the pointer (mouse/pointer) when dragging.
   this.input.on('drag', function(pointer, gameObject, dragX, dragY) {
@@ -167,11 +177,47 @@ gameScene.placeItem = function(pointer, localX, localY) {
   //check that an item was selected
   if(!this.selectedItem) return;
 
+  //ui must be unblocked
+  if(this.uiBlocked) return;
+
   //create a new item in the positing the player clicked.
   let newItem = this.add.sprite(localX, localY, this.selectedItem.texture.key);
 
+  
 
-  console.log(this.selectedItem.customStats);
+  //block the ui
+  this.uiBlocked = true;
+
+  //pet movement (tween)
+  let petTween = this.tweens.add({
+    targets: this.pet,
+    duration: 500,
+    x: newItem.x,
+    y: newItem.y,
+    paused: false,
+    callbackScope: this,
+    onComplete: function(
+      tween, sprites
+    ) {
+      
+      //destroy the item
+      newItem.destroy();
+
+
+      //play spritesheet animation
+      this.pet.play('funnyfaces');
+
+      // event listener for when spritesheet animation ends
+      this.pet.on('animationcomplete', function() {
+
+        // set pet back to neutral face
+        this.pet.setFrame(0);
+
+//clear the UI
+this.uiReady();
+      }, this);
+
+
   // pet stats
   for (stat in this.selectedItem.customStats) {
     if(this.selectedItem.customStats.hasOwnProperty(stat)) {
@@ -179,10 +225,14 @@ gameScene.placeItem = function(pointer, localX, localY) {
     };
   };
 
-  console.log(this.stats);
+      
+    }
+  });
 
-  //clear the UI
-  this.uiReady();
+
+  
+
+  
 
 }; //end placeItem
 
