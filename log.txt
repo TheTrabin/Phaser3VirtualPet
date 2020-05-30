@@ -1,0 +1,82 @@
+Sprite Sheet
+
+//load Sprite sheet
+this.load.spritesheet("pet", 'assets/images/pet.png', {
+    frameWidth: 97,
+    frameHeight: 83,
+    margin: 1, 
+    spacing: 1,
+});
+
+//add sprite
+
+gameScene.create = function() {
+
+  this.pet = this.add.sprite(100,200, 'pet');
+};
+
+
+set things draggable
+
+this.input.setDraggable(this.pet);
+
+//explicit. Follow the pointer (mouse/pointer) when dragging.
+  this.input.on('drag', function(pointer, gameObject, dragX, dragY) {
+    //make sprite located at coordinate of the dragging
+    gameObject.x = dragX;
+    gameObject.y = dragY;
+    
+  });
+
+   // console.log(this.customStats);
+
+
+
+
+//place new item on the game
+gameScene.placeItem = function(pointer, localX, localY) {
+    check pointer on click location.
+   console.log(pointer);
+console.log(localX, localY);
+}; //end placeItem
+
+//singletons
+this.stats.health = this.selectedItem.customStats.health;
+  this.stats.fun = this.selectedItem.customStats.fun;
+
+//benefit is if there's more than one or two stats, this will rock with all of them.
+for (stat in this.selectedItem.customStats) {
+    if(this.selectedItem.customStats.hasOwnProperty(stat)) {
+        this.stats[stat] =+ this.selectedItem.customStats[stat];
+    };
+  };
+
+
+//replacing with Tween
+   // setTimeout(function() {
+  //   //set the scene back to ready
+  //   scene.uiReady();
+  // }, 2000);
+
+  Heads up display time
+
+  Timed Events....
+
+  Remooooooved for an array:
+  
+   this.healthDecay = 5;
+   this.funDecay = 2;
+
+
+Home Screen and Game over
+
+
+
+
+//no longer needed. In Loading Scene now.
+// load asset files for our game
+gameScene.preload = function() {
+  
+  
+
+}; //end preload
