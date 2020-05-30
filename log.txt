@@ -57,3 +57,7 @@ for (stat in this.selectedItem.customStats) {
   //   //set the scene back to ready
   //   scene.uiReady();
   // }, 2000);
+
+  Heads up display time
+
+  

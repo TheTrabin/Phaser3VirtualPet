@@ -67,6 +67,10 @@ gameScene.create = function() {
 //create ui
 this.createUi();
 
+//show stats to the user
+this.createHud();
+this.refreshHud();
+
 
 }; //end create
 
@@ -133,11 +137,11 @@ if(this.scene.uiBlocked) return;
 
       // set ui to ready
       this.scene.uiReady();
+
+      //refresh hud
+    this.scene.refreshHud();
     }
   });
-  
-
-  console.log('we are rotating the pet!');
 };
 
 // pick item
@@ -213,28 +217,48 @@ gameScene.placeItem = function(pointer, localX, localY) {
         // set pet back to neutral face
         this.pet.setFrame(0);
 
-//clear the UI
-this.uiReady();
+        //clear the UI
+        this.uiReady();
+
+      //refresh hud
+      this.refreshHud();
+
       }, this);
 
 
   // pet stats
-  for (stat in this.selectedItem.customStats) {
+  for(stat in this.selectedItem.customStats) {
     if(this.selectedItem.customStats.hasOwnProperty(stat)) {
-        this.stats[stat] =+ this.selectedItem.customStats[stat];
-    };
+        this.stats[stat] += this.selectedItem.customStats[stat];
+    }
   };
 
       
     }
   });
-
-
-  
-
-  
+ 
 
 }; //end placeItem
+
+// create the text element that wioll show the stats
+gameScene.createHud = function() {
+  //health stat
+  this.healthText = this.add.text(20,20, 'Health: ', {
+    font: '24px Ariel',
+    fill: '#ffffff'
+  });
+//fun stat
+this.funText = this.add.text(170,20, 'Fun: ', {
+  font: '24px Ariel',
+  fill: '#ffffff'
+});
+};
+
+// show the current balue of health and fun
+gameScene.refreshHud = function() {
+  this.healthText.setText('Health: ' + this.stats.health);
+  this.funText.setText('Fun: ' + this.stats.fun);
+}
 
 
 // our game's configuration
